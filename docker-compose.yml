@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+
+### Applications Code Container #############################
+
+    # web:
+    #   image: debian:jessie
+    #   volumes:
+    #     - ./www:/var/www
+
+### PHP-FPM Container #######################################
+
+    php-fpm:
+      build:
+        context: ./php
+      container_name: php
+      volumes:
+        - ../www:/app
+      expose:
+        - "9000"
+
+### Nginx Server Container ##################################
+
+    nginx:
+      build:
+        context: ./nginx
+      container_name: nginx
+      volumes:
+          - ../www:/app
+      ports:
+          - "80:80"
+          - "443:443"
+      depends_on:
+          - php-fpm
+
